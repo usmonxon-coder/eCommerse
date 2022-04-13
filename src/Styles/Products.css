@@ -1,0 +1,28 @@
+.products .row .boxes .card{
+  border-radius: 20px;
+  overflow: hidden;
+}
+.products .row .black {
+  background-color: rgba(0, 0, 255, 0.801);
+  transform: scale(0.8);
+  transition: 0.8s ease-in-out;
+  opacity: 0;
+}
+.products .row .black .buttons {
+  height: 55vh;
+}
+.products .row .buttons .btn {
+  transition: 0.9s ease;
+  width: 40%;
+  border-radius:  10px;
+  
+}
+.products .row .buttons .btn:hover {
+  background-color: red;
+  color: blue;
+}
+.products .row .card:hover .black {
+  transform: scale(1);
+  opacity: 1;
+  /* background-color: blue; */
+}

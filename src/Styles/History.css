@@ -1,0 +1,8 @@
+@media (max-width: 767px) {
+  .history .container {
+    overflow: auto;
+  }
+  .history table {
+    width: 600px;
+  }
+}

@@ -1,0 +1,32 @@
+.navbar1 .navbar .lang {
+  background-color: rgba(128, 255, 0, 0.623);
+  padding: 7px;
+  border-radius: 7px;
+}
+.navbar1 .navbar form {
+  width: 55%;
+}
+.navbar1 .navbar .filter {
+  border-radius: 7px;
+  padding: 5px;
+}
+.navbar1 .navbar b {
+  font-size: 22px;
+}
+.navbar1 .navbar .nav-item img {
+  width: 35px;
+}
+.navbar1 .nav-item .korzinka {
+  border-radius: 7px;
+  padding: 2px 5px 2px 5px;
+}
+li {
+  list-style-type: none;
+}
+
+@media (max-width: 992px) {
+  .navbar1 .navbar form {
+    width: 100%;
+  }
+}
+      

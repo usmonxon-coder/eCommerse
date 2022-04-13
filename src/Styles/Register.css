@@ -1,0 +1,44 @@
+.register {
+  background-image: url(../../public/images/bgci.png);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.register .boxes {
+  height: 100vh;
+}
+.register .boxes .box {
+  width: 30%;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.623);
+  background-color: rgba(192, 192, 192, 0.836);
+  position: relative;
+}
+.register .box input {
+  border: none;
+  border-radius: 0;
+  border-bottom: 2px solid black;
+  background-color: transparent;
+  box-shadow: none;
+}
+.register .boxes .link {
+  text-align: center;
+  text-decoration: none;
+  color: red;
+}
+@media (max-width: 992px) {
+  .register .boxes .box {
+    width: 50%;
+  }
+}
+@media (max-width: 576px) {
+  .register .boxes .box {
+    width: 70%;
+  }
+}
+@media (max-width: 400px) {
+  .register .boxes .box {
+    width: 100%;
+  }
+}
