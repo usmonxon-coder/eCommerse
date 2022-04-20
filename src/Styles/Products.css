@@ -1,6 +1,7 @@
-.products .row .boxes .card{
+.products .row .boxes .card {
   border-radius: 20px;
   overflow: hidden;
+  position: relative;
 }
 .products .row .black {
   background-color: rgba(0, 0, 255, 0.801);
@@ -14,8 +15,7 @@
 .products .row .buttons .btn {
   transition: 0.9s ease;
   width: 40%;
-  border-radius:  10px;
-  
+  border-radius: 10px;
 }
 .products .row .buttons .btn:hover {
   background-color: red;
@@ -25,4 +25,13 @@
   transform: scale(1);
   opacity: 1;
   /* background-color: blue; */
+}
+.products .container input {
+  /* padding: 8px; */
+  border: 1px solid red;
+}
+.products .container .cardcheck {
+  position: absolute;
+  z-index: 100;
+  left: 14px;
 }

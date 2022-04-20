@@ -24,4 +24,6 @@ export const uzContent = {
   BestSales: "Eng yaxshi sotuvlar",
   LowPrice: "Past narx",
   HightPrice: "Yuqori narx",
+  delete: "O'chirish",
+  taxrir: "Tahrirlash",
 };

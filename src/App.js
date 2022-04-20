@@ -14,6 +14,8 @@ import Cart from "./components/Products/Cart";
 import Product from "./components/Products/Product";
 import History from "./components/Products/History";
 import Orderhistory from "./components/Products/Orderhistory";
+import CreateProducts from "./components/Products/CreateProducts";
+import Category from "./components/Products/Category";
 
 export default function App() {
   const { auth, loading } = useSelector((state) => state);
@@ -53,8 +55,10 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/product/:id" element={<Product />} />
-        <Route path="/history" element={<History />} />
+        <Route path="/createProducts" element={<CreateProducts />} />
+        <Route path="/category" element={<Category />} />
         <Route path="/order" element={<Orderhistory />} />
+        <Route path="/history" element={<History />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/*" element={<NotFount />} />
       </Routes>

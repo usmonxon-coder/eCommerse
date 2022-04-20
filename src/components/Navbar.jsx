@@ -90,9 +90,15 @@ export default function Navbar(props) {
     <div className="navbar1">
       <div className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container">
-          <Link className="navbar-brand" to="/">
-            eCommerce
-          </Link>
+          {auth.user && auth.user.role === 1 ? (
+            <Link className="navbar-brand" to="/">
+              Admin
+            </Link>
+          ) : (
+            <Link className="navbar-brand" to="/">
+              eCommerce
+            </Link>
+          )}
           <button
             className="navbar-toggler mx-auto "
             type="button"
@@ -109,13 +115,27 @@ export default function Navbar(props) {
             id="navbarSupportedContent"
           >
             <ul className="d-flex align-items-center justify-content-center ms-lg-auto mb-2 mb-lg-0">
-              {/* {auth.user.role === 1 && (
-                <li className="nav-item">
-                  <Link className="nav-link active" to="/">
-                    Products
-                  </Link>
-                </li>
-              )} */}
+              {auth.user && auth.user.role === 1 ? (
+                <ul className="d-flex align-items-center justify-content-center">
+                  <li className="nav-item">
+                    <Link className="nav-link active" to="/">
+                      Products
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link active" to="/createProducts">
+                      Created products
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link active" to="/category">
+                      Bolimlar
+                    </Link>
+                  </li>
+                </ul>
+              ) : (
+                ""
+              )}
 
               {!auth.user && (
                 <li className="nav-item">
@@ -144,7 +164,7 @@ export default function Navbar(props) {
                   {langs[`${lang}`].logout}
                 </button>
               )}
-              {auth.user && (
+              {auth.user && auth.user.role !== 1 ? (
                 <li className="nav-item me-3">
                   <Link
                     className="korzinka nav-link active bg-success"
@@ -157,6 +177,8 @@ export default function Navbar(props) {
                     </span>
                   </Link>
                 </li>
+              ) : (
+                ""
               )}
             </ul>
           </div>
@@ -171,7 +193,7 @@ export default function Navbar(props) {
         </div>
       </div>
       {window.location.pathname === "/" ? (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className="navbar navbar-expand-lg">
           <div className="container">
             <div
               className="collapse navbar-collapse"

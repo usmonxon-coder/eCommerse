@@ -72,32 +72,84 @@ export default function Products(props) {
   return (
     <div className="products pt-4">
       <div className="container">
+        {auth.user && auth.user.role === 1 ? (
+          <div className="deleted">
+            <div className="tanlamoq d-flex align-items-center justify-content-end">
+              <form>
+                <label className="text-danger me-1" htmlFor="tanla">
+                  Barchasini tanlash
+                </label>
+                <input
+                  htmlFor="tanla"
+                  className="form-check-input me-2 ms-1 shadow-none p-2"
+                  type="checkbox"
+                  name="checkbox"
+                  id="tanla"
+                />
+              </form>
+              <button className="btn btn-danger">Barchasini ochirish</button>
+            </div>
+            <hr />
+          </div>
+        ) : (
+          ""
+        )}
+
         {Allproducts.length === 0 && (
           <div>
             <h1 className="text-center my-3">{langs[`${lang}`].noProducts}</h1>
           </div>
         )}
-        <div className="row">
+        <div className="row mb-3">
           {Allproducts.map((item, index) => (
             <div
               key={index}
               className="boxes col-lg-3 col-md-4 col-sm-6 mb-3 position-relative"
             >
+              {auth.user && auth.user.role === 1 ? (
+                <input
+                  className="cardcheck form-check-input shadow-none p-2"
+                  type="checkbox"
+                  name="checkbox"
+                  id="tanla"
+                />
+              ) : (
+                ""
+              )}
+
               <div className="card h-100 shadow">
                 <div className="black w-100 h-100 position-absolute">
                   <div className="buttons d-flex  align-items-center justify-content-evenly ">
-                    <button
-                      onClick={() => addToCard(item)}
-                      className="btn btn-light d-block shadow-none"
-                    >
-                      {langs[`${lang}`].buy}
-                    </button>
-                    <Link
-                      to={`/product/${item._id}`}
-                      className="btn btn-light d-block shadow-none"
-                    >
-                      {langs[`${lang}`].view}
-                    </Link>
+                    {auth.user && auth.user.role === 1 ? (
+                      <>
+                        <button
+                          className="btn btn-light d-block shadow-none"
+                        >
+                          {langs[`${lang}`].delete}
+                        </button>
+                        <Link
+                          to={`/product/${item._id}`}
+                          className="btn btn-light d-block shadow-none"
+                        >
+                          {langs[`${lang}`].taxrir}
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => addToCard(item)}
+                          className="btn btn-light d-block shadow-none"
+                        >
+                          {langs[`${lang}`].buy}
+                        </button>
+                        <Link
+                          to={`/product/${item._id}`}
+                          className="btn btn-light d-block shadow-none"
+                        >
+                          {langs[`${lang}`].view}
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
                 <img
