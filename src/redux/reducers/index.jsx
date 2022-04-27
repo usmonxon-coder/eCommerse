@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { auth } from "./auth";
 import { category } from "./category";
+import { currentProduct } from "./currentProduct";
 import { globalState } from "./globalState";
 import { lang } from "./lang";
 import { loading } from "./loading";
@@ -13,4 +14,5 @@ export const rootReducer = combineReducers({
   products: products,
   globalState: globalState,
   category: category,
+  currentProduct: currentProduct,
 });

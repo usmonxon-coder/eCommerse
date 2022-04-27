@@ -35,3 +35,10 @@
   z-index: 100;
   left: 14px;
 }
+.products .container .yuqoriga{
+  position: fixed;
+  bottom: 0;
+  width: 50px;
+  height: 50px;
+  outline: none;
+}

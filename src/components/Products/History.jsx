@@ -1,10 +1,12 @@
 import axios from "axios";
-import "../../Styles/History.css"
+import "../../Styles/History.css";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function History(props) {
   const [tarix, setTarix] = useState([]);
+  const { cart } = useSelector((state) => state);
 
   const getTarix = () => {
     axios
@@ -16,6 +18,7 @@ export default function History(props) {
         console.log(err.response);
       });
   };
+  
   useEffect(() => {
     getTarix();
   }, []);

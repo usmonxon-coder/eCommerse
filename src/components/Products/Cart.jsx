@@ -3,8 +3,23 @@ import { langs } from "../../langs/langs";
 import { globalTypes } from "../../redux/actions/globalTypes";
 
 export default function Cart(props) {
+  const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.globalState);
-  const { lang, auth } = useSelector((state) => state);
+  const { lang, auth, currentProduct } = useSelector((state) => state);
+
+  const minus = () => {
+    if (currentProduct.count > 1) {
+      dispatch({ type: globalTypes.DICRIMENT, payload: currentProduct });
+    }
+  };
+
+  const plus = (item) => {
+    let salom = cart.findIndex((item) => item === currentProduct);
+    // if (salom !== -1) {
+    dispatch({ type: globalTypes.INCREMENT, payload: currentProduct });
+    // }
+    console.log(item, salom);
+  };
 
   return (
     <div className="cart">
@@ -17,7 +32,8 @@ export default function Cart(props) {
         {auth.user && (
           <div className="xarid d-flex align-items-center justify-content-between">
             <h3 className="my-4">
-              <b>{langs[`${lang}`].total_price}: </b> 122$
+              <b>{langs[`${lang}`].total_price}: </b> {cart.price}
+              {console.log(cart.find((item) => item.price))}
             </h3>
             <button className="btn btn-success">Paypal</button>
           </div>
@@ -45,9 +61,21 @@ export default function Cart(props) {
                       {item[`content${lang}`]}
                     </p>
                     <div className="btn-group mb-3">
-                      <button className="btn px-3 btn-info">-</button>
-                      <button className="btn px-3 btn-light">1</button>
-                      <button className="btn px-3 btn-info">+</button>
+                      <button
+                        onClick={() => minus(item._id)}
+                        className="btn px-3 btn-info"
+                      >
+                        -
+                      </button>
+                      <button className="btn px-3 btn-light">
+                        {currentProduct.count}
+                      </button>
+                      <button
+                        onClick={() => plus(item._id)}
+                        className="btn px-3 btn-info"
+                      >
+                        +
+                      </button>
                     </div>
                   </div>
                 </div>

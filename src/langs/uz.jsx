@@ -26,4 +26,5 @@ export const uzContent = {
   HightPrice: "Yuqori narx",
   delete: "O'chirish",
   taxrir: "Tahrirlash",
+  allProducts: "Barcha mahsulotlar",
 };

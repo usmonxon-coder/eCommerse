@@ -58,9 +58,11 @@ export default function Navbar(props) {
     setMySort(sort);
     axios
       .get(
-        `/api/products?/limit=${
-          page * 3
-        }&sort=${sort}&[title${lang}][regex]=${search}&[category${lang}]=${category}`
+        `/api/products?limit=${
+          page * 8
+        }&sort=${sort}&[title${lang}][regex]=${search}&${
+          category && `[category${lang}]= ${category}`
+        }`
       )
       .then((res) => {
         console.log(res);
@@ -72,15 +74,16 @@ export default function Navbar(props) {
         dispatch({ type: globalTypes.LOADING, payload: false });
       });
   };
-  useEffect(() => {
-    if (page !== 1) {
-      getSortProducts(mySort);
-    }
-  }, [page]);
+
+  // useEffect(() => {
+  //   if (page !== 1) {
+  //     getSortProducts(mySort);
+  //   }
+  // }, [page]);
 
   useEffect(() => {
     getSortProducts(mySort);
-  }, [category]);
+  }, [category, page]);
 
   const searchProducts = () => {
     getSortProducts(mySort);
@@ -205,6 +208,7 @@ export default function Navbar(props) {
                 onChange={handleCategory1}
                 className=" filter dropdown-toogle mb-lg-0 mb-2 "
               >
+                <option value="">{langs[`${lang}`].allProducts}</option>
                 {category1.length &&
                   category1.map((item, index) => (
                     <option key={index} value={item[`name${lang}`]}>

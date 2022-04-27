@@ -26,4 +26,5 @@ export const engContent = {
   HightPrice: "Hight price",
   delete: "Delete",
   taxrir: "Edit",
+  allProducts: "All Products",
 };

@@ -2,16 +2,40 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { langs } from "../../langs/langs";
 import { globalTypes } from "../../redux/actions/globalTypes";
 
 export default function Product(props) {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { lang } = useSelector((state) => state);
+  const { lang, auth } = useSelector((state) => state);
+  const { cart } = useSelector((state) => state.globalState);
   const [relatedProduct, SetRelatedProduct] = useState([]);
   const [product, SetProduct] = useState({});
 
+  const addCart = () => {
+    // if (!cart.product) {
+    //   console.log("bor");
+    // } else {
+      let salom = cart.push(product);
+      axios
+        .put(
+          "/user/addCart",
+          { cart },
+          { headers: { Authorization: auth.accessToken } }
+        )
+        .then((res) => {
+          dispatch({ type: globalTypes.ADD_TO_CART, payload: salom });
+          console.log(res);
+          toast.success("Add To card");
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    // }
+    console.log(cart.push(product));
+  };
   const viewProduct = () => {
     dispatch({ type: globalTypes.LOADING, payload: true });
     axios
@@ -69,7 +93,9 @@ export default function Product(props) {
             <p>
               <b>{langs[`${lang}`].sold}: </b> {product.sold}
             </p>
-            <button className="btn btn-success">{langs[`${lang}`].buy}</button>
+            <button onClick={addCart} className="btn btn-success">
+              {langs[`${lang}`].buy}
+            </button>
           </div>
         </div>
         <hr className="my-5" />

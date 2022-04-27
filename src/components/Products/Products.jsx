@@ -69,6 +69,13 @@ export default function Products(props) {
     }
   };
 
+  const top = () => {
+    let yuqoriga = document.querySelector(".yuqoriga");
+    yuqoriga.style.backgroundColor = "red";
+  };
+  useEffect(() => {
+    // top();
+  }, []);
   return (
     <div className="products pt-4">
       <div className="container">
@@ -77,7 +84,7 @@ export default function Products(props) {
             <div className="tanlamoq d-flex align-items-center justify-content-end">
               <form>
                 <label className="text-danger me-1" htmlFor="tanla">
-                  Barchasini tanlash
+                  {langs[`${lang}`].selectAll}
                 </label>
                 <input
                   htmlFor="tanla"
@@ -87,7 +94,9 @@ export default function Products(props) {
                   id="tanla"
                 />
               </form>
-              <button className="btn btn-danger">Barchasini ochirish</button>
+              <button className="btn btn-outline-danger">
+                {langs[`${lang}`].selectDelete}
+              </button>
             </div>
             <hr />
           </div>
@@ -122,13 +131,11 @@ export default function Products(props) {
                   <div className="buttons d-flex  align-items-center justify-content-evenly ">
                     {auth.user && auth.user.role === 1 ? (
                       <>
-                        <button
-                          className="btn btn-light d-block shadow-none"
-                        >
+                        <button className="btn btn-light d-block shadow-none">
                           {langs[`${lang}`].delete}
                         </button>
                         <Link
-                          to={`/product/${item._id}`}
+                          to={`/createProducts/`}
                           className="btn btn-light d-block shadow-none"
                         >
                           {langs[`${lang}`].taxrir}
@@ -187,6 +194,9 @@ export default function Products(props) {
             {langs[`${lang}`].loadMore}
           </button>
         )}
+        <button onClick={top} className="btn btn-info shadow-none yuqoriga">
+          <img className="w-100" src="/images/arrow-up.png" alt="rasm" />
+        </button>
       </div>
     </div>
   );
