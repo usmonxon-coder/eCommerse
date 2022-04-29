@@ -27,6 +27,21 @@ export default function Products(props) {
         dispatch({ type: globalTypes.LOADING, payload: false });
       });
   };
+  const deleteProducts = (item, id) => {
+    const myProducts = products;
+    // let delete3 = myProducts.findIndex((it, index) => it._id === item._id);
+    // console.log(delete3);
+    console.log(myProducts);
+    axios
+      .delete(`/api/product/:${id}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
   useEffect(() => {
     if (Allproducts.length === 0) {
       getProducts();
@@ -131,7 +146,10 @@ export default function Products(props) {
                   <div className="buttons d-flex  align-items-center justify-content-evenly ">
                     {auth.user && auth.user.role === 1 ? (
                       <>
-                        <button className="btn btn-light d-block shadow-none">
+                        <button
+                          onClick={() => deleteProducts()}
+                          className="btn btn-light d-block shadow-none"
+                        >
                           {langs[`${lang}`].delete}
                         </button>
                         <Link

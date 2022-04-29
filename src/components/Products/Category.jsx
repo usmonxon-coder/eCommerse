@@ -1,6 +1,67 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { langs } from "../../langs/langs";
 
 function Category(props) {
+  const [category, setCategory] = useState({});
+  const [state, setState] = useState({ nameUz: "", nameEng: "" });
+  const { lang, auth } = useSelector((state) => state);
+  // const { cart } = useSelector((state) => state.globalState);
+
+  const getCategory = () => {
+    axios
+      .get("/api/category")
+      .then((res) => {
+        console.log(res.data);
+        setCategory(res.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setState({ ...state, [name]: value });
+  };
+
+  const addCategory = () => {
+    axios
+      .post("/api/category", state, {
+        headers: { Authorization: auth.accessToken },
+      })
+      .then((res) => {
+        console.log(res.data);
+        getCategory();
+        toast.success("Malumot qo'shildi", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const deleteCategory = (_id) => {
+    console.log(_id);
+    axios
+      .delete(`/api/product/${_id}`)
+      .then((res) => {
+        console.log(res);
+        getCategory();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getCategory();
+  }, []);
+
   return (
     <div className="category">
       <div className="container">
@@ -11,51 +72,47 @@ function Category(props) {
                 className="form-control mb-2"
                 placeholder="Uz Category..."
                 type="text"
+                name="nameUz"
+                onChange={handleInput}
               />
               <input
                 className="form-control mb-3"
                 placeholder="Eng Category..."
                 type="text"
+                name="nameEng"
+                onChange={handleInput}
               />
-              <button className="btn btn-outline-success mb-3">Add</button>
+              <button
+                onClick={addCategory}
+                className="btn btn-outline-success mb-3"
+              >
+                Add
+              </button>
             </div>
           </div>
           <div className="col-lg-6">
-            <div className="d-sm-flex align-items-center justify-content-between border p-1 px-2">
-              <h5 class="m-0">Uz: Kompyuter, Eng: Laptop</h5>
-              <div>
-                <button class="btn btn-warning me-2">Edit</button>
-                <button class="btn btn-danger">Delete</button>
-              </div>
-            </div>
-            <div className="d-sm-flex align-items-center justify-content-between border p-1 px-2">
-              <h5 class="m-0">Uz: Kitoblar, Eng: Books</h5>
-              <div>
-                <button class="btn btn-warning me-2">Edit</button>
-                <button class="btn btn-danger">Delete</button>
-              </div>
-            </div>
-            <div className="d-sm-flex align-items-center justify-content-between border p-1 px-2">
-              <h5 class="m-0">Uz: Telefonlar, Eng: Phones</h5>
-              <div>
-                <button class="btn btn-warning me-2">Edit</button>
-                <button class="btn btn-danger">Delete</button>
-              </div>
-            </div>
-            <div className="d-sm-flex align-items-center justify-content-between border p-1 px-2">
-              <h5 class="m-0">Uz: Krasofkalar, Eng: Sneakers</h5>
-              <div>
-                <button class="btn btn-warning me-2">Edit</button>
-                <button class="btn btn-danger">Delete</button>
-              </div>
-            </div>
-            <div className="d-sm-flex align-items-center justify-content-between border p-1 px-2">
-              <h5 class="m-0">Uz: Web Sayt, Eng: Web Site</h5>
-              <div>
-                <button class="btn btn-warning me-2">Edit</button>
-                <button class="btn btn-danger">Delete</button>
-              </div>
-            </div>
+            {category.length &&
+              category.map((item, index) => (
+                <div
+                  key={index}
+                  className="d-sm-flex align-items-center justify-content-between border p-1 px-2"
+                >
+                  <p className="m-0">
+                    Uz: {item.nameUz}, Eng: {item.nameEng}
+                  </p>
+                  <div>
+                    <button className="btn btn-warning me-2">
+                      {langs[`${lang}`].taxrir}
+                    </button>
+                    <button
+                      onClick={() => deleteCategory(item._id)}
+                      className="btn btn-danger"
+                    >
+                      {langs[`${lang}`].delete}
+                    </button>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>

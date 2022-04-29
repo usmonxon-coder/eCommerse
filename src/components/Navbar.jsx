@@ -25,7 +25,7 @@ export default function Navbar(props) {
     localStorage.clear("isLogin");
   };
 
-  const handleCategory = (e) => {
+  const handleCategory = () => {
     axios
       .get("/api/category")
       .then((res) => {
