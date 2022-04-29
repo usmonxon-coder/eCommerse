@@ -122,17 +122,17 @@ export default function Navbar(props) {
                 <ul className="d-flex align-items-center justify-content-center">
                   <li className="nav-item">
                     <Link className="nav-link active" to="/">
-                      Products
+                      {langs[`${lang}`].products}
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link className="nav-link active" to="/createProducts">
-                      Created products
+                     {langs[`${lang}`].createProducts}
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link className="nav-link active" to="/category">
-                      Bolimlar
+                      {langs[`${lang}`].categories}
                     </Link>
                   </li>
                 </ul>

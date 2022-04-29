@@ -27,4 +27,9 @@ export const engContent = {
   delete: "Delete",
   taxrir: "Edit",
   allProducts: "All Products",
+  selectDelete: "Delete all",
+  selectAll: "Select all",
+  products: "Products",
+  createProducts: "Create products",
+  categories: "Categories",
 };

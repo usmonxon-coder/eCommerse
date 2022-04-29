@@ -27,4 +27,9 @@ export const uzContent = {
   delete: "O'chirish",
   taxrir: "Tahrirlash",
   allProducts: "Barcha mahsulotlar",
+  selectDelete: "Barchasini o'chirish",
+  selectAll: "Barchasini tanlash",
+  products: "Mahsulotlar",
+  createProducts: "Mahsulotlarni yaratish",
+  categories: "Bo'limlar",
 };
