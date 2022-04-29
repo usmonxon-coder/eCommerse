@@ -50,7 +50,6 @@ export default function App() {
     <div className="App">
       <Navbar />
       {loading && <Spinner />}
-      <h1>salom</h1>
       <Routes>
         <Route path="/" element={<Products />} />
         <Route path="/login" element={<Login />} />
