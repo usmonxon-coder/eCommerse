@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { globalTypes } from "../../redux/actions/globalTypes";
 
@@ -10,6 +10,8 @@ export default function CreateProducts(props) {
   const { lang, auth, products } = useSelector((state) => state);
   const [images, setImages] = useState("");
   const dispatch = useDispatch();
+  const { id } = useParams();
+  // const navigate = useNavigate();
   const initialState = {
     product_id: "",
     title: "",
@@ -62,9 +64,30 @@ export default function CreateProducts(props) {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
-  console.log(data);
-  const createProduct = () => {
-    console.log("yaratildi");
+
+  const createProduct = async () => {
+    try {
+      let res;
+      if (id) {
+        res = await axios.put(
+          `/api/products/${id}`,
+          { ...data, images },
+          { headers: { Authorization: auth.accessToken } }
+        );
+      } else {
+        res = await axios.post(
+          `/api/products/${id}`,
+          { ...data, images },
+          { headers: { Authorization: auth.accessToken } }
+        );
+      }
+      setData(initialState);
+      setImages("");
+      // navigate("/");
+      toast.success(res.data.msg);
+    } catch (error) {
+      toast.error(error.response.data.msg);
+    }
   };
 
   useEffect(() => {
