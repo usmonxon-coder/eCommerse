@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { langs } from "../../langs/langs";
 import { globalTypes } from "../../redux/actions/globalTypes";
@@ -11,6 +12,7 @@ function Category(props) {
   const { lang, auth } = useSelector((state) => state);
   const [isHidden, setIsHidden] = useState(true);
   const dispatch = useDispatch();
+  // const {id}=useParams()
 
   const getCategory = () => {
     dispatch({ type: globalTypes.LOADING, payload: true });
@@ -57,16 +59,19 @@ function Category(props) {
     }
   };
 
-  const deleteCategory = () => {
+  const deleteCategory = (id) => {
     dispatch({ type: globalTypes.LOADING, payload: true });
     axios
-      .delete(`/api/category/${state._id}`, state, {
+      .delete(`/api/category/${id}`, {
         headers: { Authorization: auth.accessToken },
       })
       .then((res) => {
         console.log(res);
         getCategory();
         dispatch({ type: globalTypes.LOADING, payload: false });
+        toast.success("Malumot o'chirildi", {
+          position: "top-center",
+        });
       })
       .catch((err) => {
         console.log(err.response);
@@ -110,7 +115,7 @@ function Category(props) {
             <div className="box0">
               <input
                 className="form-control mb-2"
-                placeholder="Uz Category..."
+                placeholder={`Uz ${langs[`${lang}`].category}...`}
                 type="text"
                 name="nameUz"
                 value={state.nameUz}
@@ -118,7 +123,7 @@ function Category(props) {
               />
               <input
                 className="form-control mb-3"
-                placeholder="Eng Category..."
+                placeholder={`Eng ${langs[`${lang}`].category}...`}
                 type="text"
                 name="nameEng"
                 value={state.nameEng}
@@ -129,14 +134,14 @@ function Category(props) {
                   onClick={addCategory}
                   className="btn btn-outline-success mb-3"
                 >
-                  Add
+                  {langs[`${lang}`].add}
                 </button>
               ) : (
                 <button
                   onClick={saveCategory}
                   className="btn btn-outline-warning mb-3"
                 >
-                  Edit
+                  {langs[`${lang}`].taxrir}
                 </button>
               )}
             </div>
@@ -159,7 +164,7 @@ function Category(props) {
                       {langs[`${lang}`].taxrir}
                     </button>
                     <button
-                      onClick={() => deleteCategory()}
+                      onClick={() => deleteCategory(item._id)}
                       className="btn btn-danger"
                     >
                       {langs[`${lang}`].delete}

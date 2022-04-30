@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { langs } from "../../langs/langs";
 import { globalTypes } from "../../redux/actions/globalTypes";
 
 export default function CreateProducts(props) {
@@ -112,7 +113,7 @@ export default function CreateProducts(props) {
                   {" "}
                   <img
                     style={{ padding: "180px 20px" }}
-                    className="w-50 "
+                    className="w-50"
                     src="/images/plus.png"
                     alt="rasm"
                   />
@@ -148,7 +149,7 @@ export default function CreateProducts(props) {
                 />
                 <input
                   className="form-control mb-2"
-                  placeholder="Price..."
+                  placeholder={langs[`${lang}`].price}
                   type="text"
                   name="price"
                   onChange={handleInput}
@@ -205,7 +206,7 @@ export default function CreateProducts(props) {
                   includes a modern Intel Pentium Silver processor.
                 </textarea>
                 <select className="form-control mb-2 form-select" name="" id="">
-                  <option value="">Bo'limni tanlang</option>
+                  <option value="">{langs[`${lang}`].selectCategory}</option>
                   {category.length &&
                     category.map((item, index) => (
                       <option
@@ -221,7 +222,7 @@ export default function CreateProducts(props) {
                   onClick={createProduct}
                   className="btn btn-danger form-control"
                 >
-                  Create...
+                  {langs[`${lang}`].create}
                 </button>
               </form>
             </div>

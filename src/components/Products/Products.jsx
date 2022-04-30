@@ -27,18 +27,22 @@ export default function Products(props) {
         dispatch({ type: globalTypes.LOADING, payload: false });
       });
   };
-  const deleteProducts = (item, id) => {
-    const myProducts = products;
-    // let delete3 = myProducts.findIndex((it, index) => it._id === item._id);
-    // console.log(delete3);
-    console.log(myProducts);
+
+  const deleteProducts = (id) => {
+    dispatch({ type: globalTypes.LOADING, payload: true });
     axios
-      .delete(`/api/product/:${id}`)
+      .delete(`/api/products/${id}`, {
+        headers: { Authorization: auth.accessToken },
+      })
       .then((res) => {
         console.log(res);
+        getProducts();
+        toast.success(res.data.msg);
+        dispatch({ type: globalTypes.LOADING, payload: false });
       })
       .catch((err) => {
         console.log(err.response);
+        dispatch({ type: globalTypes.LOADING, payload: false });
       });
   };
 
@@ -88,9 +92,7 @@ export default function Products(props) {
     let yuqoriga = document.querySelector(".yuqoriga");
     yuqoriga.style.backgroundColor = "red";
   };
-  useEffect(() => {
-    // top();
-  }, []);
+  
   return (
     <div className="products pt-4">
       <div className="container">
@@ -147,7 +149,7 @@ export default function Products(props) {
                     {auth.user && auth.user.role === 1 ? (
                       <>
                         <button
-                          onClick={() => deleteProducts()}
+                          onClick={() => deleteProducts(item._id)}
                           className="btn btn-light d-block shadow-none"
                         >
                           {langs[`${lang}`].delete}

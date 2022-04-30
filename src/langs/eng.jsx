@@ -32,4 +32,7 @@ export const engContent = {
   products: "Products",
   createProducts: "Create products",
   categories: "Categories",
+  add: "Add",
+  selectCategory: "Select category",
+  create: "Create...",
 };

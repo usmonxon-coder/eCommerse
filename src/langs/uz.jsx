@@ -32,4 +32,7 @@ export const uzContent = {
   products: "Mahsulotlar",
   createProducts: "Mahsulotlarni yaratish",
   categories: "Bo'limlar",
+  add: "Qo'shish",
+  selectCategory: "Bo'limni tanlang",
+  create: "Yaratish...",
 };
