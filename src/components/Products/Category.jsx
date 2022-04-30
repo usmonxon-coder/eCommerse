@@ -1,24 +1,29 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { langs } from "../../langs/langs";
+import { globalTypes } from "../../redux/actions/globalTypes";
 
 function Category(props) {
   const [category, setCategory] = useState({});
   const [state, setState] = useState({ nameUz: "", nameEng: "" });
   const { lang, auth } = useSelector((state) => state);
-  // const { cart } = useSelector((state) => state.globalState);
+  const [isHidden, setIsHidden] = useState(true);
+  const dispatch = useDispatch();
 
   const getCategory = () => {
+    dispatch({ type: globalTypes.LOADING, payload: true });
     axios
       .get("/api/category")
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setCategory(res.data);
+        dispatch({ type: globalTypes.LOADING, payload: false });
       })
       .catch((err) => {
         console.log(err.response);
+        dispatch({ type: globalTypes.LOADING, payload: false });
       });
   };
 
@@ -28,34 +33,69 @@ function Category(props) {
   };
 
   const addCategory = () => {
+    dispatch({ type: globalTypes.LOADING, payload: true });
+    {
+      state.nameUz === "" && state.nameEng === ""
+        ? toast.warning("Iltimos maydonni to'ldiring")
+        : axios
+            .post("/api/category", state, {
+              headers: { Authorization: auth.accessToken },
+            })
+            .then((res) => {
+              getCategory();
+              toast.success("Malumot qo'shildi", {
+                position: "top-center",
+                autoClose: 3000,
+              });
+              dispatch({ type: globalTypes.LOADING, payload: false });
+              setState({ nameUz: "", nameEng: "" });
+            })
+            .catch((err) => {
+              console.log(err.response);
+              dispatch({ type: globalTypes.LOADING, payload: false });
+            });
+    }
+  };
+
+  const deleteCategory = () => {
+    dispatch({ type: globalTypes.LOADING, payload: true });
     axios
-      .post("/api/category", state, {
+      .delete(`/api/category/${state._id}`, state, {
         headers: { Authorization: auth.accessToken },
       })
       .then((res) => {
-        console.log(res.data);
+        console.log(res);
         getCategory();
-        toast.success("Malumot qo'shildi", {
-          position: "top-center",
-          autoClose: 3000,
-        });
+        dispatch({ type: globalTypes.LOADING, payload: false });
       })
       .catch((err) => {
         console.log(err.response);
+        dispatch({ type: globalTypes.LOADING, payload: false });
       });
   };
 
-  const deleteCategory = (_id) => {
-    console.log(_id);
+  const saveCategory = () => {
+    dispatch({ type: globalTypes.LOADING, payload: true });
     axios
-      .delete(`/api/product/${_id}`)
+      .put(`/api/category/${state._id}`, state, {
+        headers: { Authorization: auth.accessToken },
+      })
       .then((res) => {
-        console.log(res);
         getCategory();
+        setIsHidden(true);
+        toast.success("Malumot o'zgartirildi");
+        setState({ nameUz: "", nameEng: "" });
+        dispatch({ type: globalTypes.LOADING, payload: false });
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response);
+        dispatch({ type: globalTypes.LOADING, payload: false });
       });
+  };
+
+  const editCategory = (item) => {
+    setState(item);
+    setIsHidden(false);
   };
 
   useEffect(() => {
@@ -73,6 +113,7 @@ function Category(props) {
                 placeholder="Uz Category..."
                 type="text"
                 name="nameUz"
+                value={state.nameUz}
                 onChange={handleInput}
               />
               <input
@@ -80,14 +121,24 @@ function Category(props) {
                 placeholder="Eng Category..."
                 type="text"
                 name="nameEng"
+                value={state.nameEng}
                 onChange={handleInput}
               />
-              <button
-                onClick={addCategory}
-                className="btn btn-outline-success mb-3"
-              >
-                Add
-              </button>
+              {isHidden ? (
+                <button
+                  onClick={addCategory}
+                  className="btn btn-outline-success mb-3"
+                >
+                  Add
+                </button>
+              ) : (
+                <button
+                  onClick={saveCategory}
+                  className="btn btn-outline-warning mb-3"
+                >
+                  Edit
+                </button>
+              )}
             </div>
           </div>
           <div className="col-lg-6">
@@ -101,11 +152,14 @@ function Category(props) {
                     Uz: {item.nameUz}, Eng: {item.nameEng}
                   </p>
                   <div>
-                    <button className="btn btn-warning me-2">
+                    <button
+                      onClick={() => editCategory(item)}
+                      className="btn btn-warning me-2"
+                    >
                       {langs[`${lang}`].taxrir}
                     </button>
                     <button
-                      onClick={() => deleteCategory(item._id)}
+                      onClick={() => deleteCategory()}
                       className="btn btn-danger"
                     >
                       {langs[`${lang}`].delete}
