@@ -28,5 +28,12 @@ li {
   .navbar1 .navbar form {
     width: 100%;
   }
+  .navbar1 .navbar .filter {
+    width: 100%;
+  }
 }
-      
+@media (max-width: 767px) {
+  .navbar1 .navbar .admin0 {
+    flex-direction: column;
+  }
+}

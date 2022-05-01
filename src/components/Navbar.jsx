@@ -103,7 +103,7 @@ export default function Navbar(props) {
             </Link>
           )}
           <button
-            className="navbar-toggler mx-auto "
+            className="navbar-toggler mx-auto"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent"
@@ -117,9 +117,9 @@ export default function Navbar(props) {
             className="collapse navbar-collapse mt-lg-0 mt-3 me-lg-3 me-0"
             id="navbarSupportedContent"
           >
-            <ul className="d-flex align-items-center justify-content-center ms-lg-auto mb-2 mb-lg-0">
+            <ul className="admin0 d-flex align-items-center justify-content-center ms-lg-auto mb-2 mb-lg-0">
               {auth.user && auth.user.role === 1 ? (
-                <ul className="d-flex align-items-center justify-content-center">
+                <>
                   <li className="nav-item">
                     <Link className="nav-link active" to="/">
                       {langs[`${lang}`].products}
@@ -127,7 +127,7 @@ export default function Navbar(props) {
                   </li>
                   <li className="nav-item">
                     <Link className="nav-link active" to="/createProducts">
-                     {langs[`${lang}`].createProducts}
+                      {langs[`${lang}`].createProducts}
                     </Link>
                   </li>
                   <li className="nav-item">
@@ -135,11 +135,10 @@ export default function Navbar(props) {
                       {langs[`${lang}`].categories}
                     </Link>
                   </li>
-                </ul>
+                </>
               ) : (
                 ""
               )}
-
               {!auth.user && (
                 <li className="nav-item">
                   <Link className="nav-link active" to="/login">
@@ -167,6 +166,7 @@ export default function Navbar(props) {
                   {langs[`${lang}`].logout}
                 </button>
               )}
+
               {auth.user && auth.user.role !== 1 ? (
                 <li className="nav-item me-3">
                   <Link
@@ -199,23 +199,25 @@ export default function Navbar(props) {
         <nav className="navbar navbar-expand-lg">
           <div className="container">
             <div
-              className="collapse navbar-collapse"
+              className="collapse navbar-collapse filtered"
               id="navbarSupportedContent"
             >
-              <b className="me-2 active">Filter:</b>
-              <select
-                value={category}
-                onChange={handleCategory1}
-                className=" filter dropdown-toogle mb-lg-0 mb-2 "
-              >
-                <option value="">{langs[`${lang}`].allProducts}</option>
-                {category1.length &&
-                  category1.map((item, index) => (
-                    <option key={index} value={item[`name${lang}`]}>
-                      {item[`name${lang}`]}
-                    </option>
-                  ))}
-              </select>
+              <div className="d-flex">
+                <b className="me-2 active">Filter: </b>
+                <select
+                  value={category}
+                  onChange={handleCategory1}
+                  className=" filter dropdown-toogle mb-lg-0 mb-2"
+                >
+                  <option value="">{langs[`${lang}`].allProducts}</option>
+                  {category1.length &&
+                    category1.map((item, index) => (
+                      <option key={index} value={item[`name${lang}`]}>
+                        {item[`name${lang}`]}
+                      </option>
+                    ))}
+                </select>
+              </div>
               <form className="d-flex mx-lg-3 mb-lg-0 mb-2">
                 <input
                   onChange={(e) => setSearch(e.target.value)}
@@ -232,7 +234,7 @@ export default function Navbar(props) {
                   Search
                 </button>
               </form>
-              <div className=" ms-auto">
+              <div className="d-flex ms-auto">
                 <b className="active me-2">Sort: </b>
                 <select
                   onChange={handleSelectSort}

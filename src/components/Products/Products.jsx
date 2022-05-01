@@ -88,11 +88,23 @@ export default function Products(props) {
     }
   };
 
+  let yuqoriga = document.querySelector(".to_top_btn");
   const top = () => {
-    let yuqoriga = document.querySelector(".yuqoriga");
-    yuqoriga.style.backgroundColor = "red";
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 200) {
+        yuqoriga.style.display = "flex";
+      } else {
+        yuqoriga.style.display = "none";
+      }
+    });
+    yuqoriga.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
   };
-  
+
   return (
     <div className="products pt-4">
       <div className="container">
@@ -214,8 +226,8 @@ export default function Products(props) {
             {langs[`${lang}`].loadMore}
           </button>
         )}
-        <button onClick={top} className="btn btn-info shadow-none yuqoriga">
-          <img className="w-100" src="/images/arrow-up.png" alt="rasm" />
+        <button onClick={top} className="btn btn-info shadow-none to_top_btn">
+          <img className="w-100 " src="/images/arrow-up.png" alt="rasm" />
         </button>
       </div>
     </div>
