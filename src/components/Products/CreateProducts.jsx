@@ -12,7 +12,7 @@ export default function CreateProducts(props) {
   const [images, setImages] = useState("");
   const dispatch = useDispatch();
   const { id } = useParams();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const initialState = {
     product_id: "",
     title: "",
@@ -91,6 +91,17 @@ export default function CreateProducts(props) {
     }
   };
 
+  const editProduct = () => {
+    axios
+      .put(`/api/product/:id`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
   useEffect(() => {
     getCategory();
   }, []);
@@ -149,7 +160,7 @@ export default function CreateProducts(props) {
                 />
                 <input
                   className="form-control mb-2"
-                  placeholder={langs[`${lang}`].price}
+                  placeholder={`${langs[`${lang}`].price}...`}
                   type="text"
                   name="price"
                   onChange={handleInput}
@@ -223,6 +234,12 @@ export default function CreateProducts(props) {
                   className="btn btn-danger form-control"
                 >
                   {langs[`${lang}`].create}
+                </button>
+                <button
+                  onClick={() => editProduct()}
+                  className="btn btn-danger form-control"
+                >
+                  Taxrirlah...
                 </button>
               </form>
             </div>
