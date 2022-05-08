@@ -105,13 +105,50 @@ export default function Products(props) {
     });
   };
 
+  const deleteAllProducts = (e) => {
+    e.preventDefault();
+    for (let i = 0; i < products.length; i++) {
+      deleteProducts(products[i]._id);
+    }
+  };
+
+  const checkedAllProducts = (e) => {
+    let myNewProducts = [...products];
+    if (!e.target.checked) {
+      for (let i = 0; i < products.length; i++) {
+        myNewProducts[i].checked = false;
+      }
+    } else {
+      for (let i = 0; i < products.length; i++) {
+        myNewProducts[i].checked = true;
+      }
+    }
+    setAllProducts(myNewProducts);
+    dispatch({ type: globalTypes.PRODUCTS, payload: myNewProducts });
+  };
+
+  const changeItem = (item) => {
+    let myNewProducts = [...products];
+    myNewProducts.forEach((product, index) => {
+      if (product._id === item._id) {
+        if (item.checked) {
+          product.checked = false;
+        } else {
+          product.checked = true;
+        }
+      }
+    });
+    setAllProducts(myNewProducts);
+    dispatch({ type: globalTypes.PRODUCTS, payload: myNewProducts });
+  };
+   
   return (
     <div className="products pt-4">
       <div className="container">
         {auth.user && auth.user.role === 1 ? (
           <div className="deleted">
             <div className="tanlamoq d-flex align-items-center justify-content-end">
-              <form>
+              <form onSubmit={deleteAllProducts}>
                 <label className="text-danger me-1" htmlFor="tanla">
                   {langs[`${lang}`].selectAll}
                 </label>
@@ -121,11 +158,12 @@ export default function Products(props) {
                   type="checkbox"
                   name="checkbox"
                   id="tanla"
+                  onChange={checkedAllProducts}
                 />
+                <button className="btn btn-outline-danger">
+                  {langs[`${lang}`].selectDelete}
+                </button>
               </form>
-              <button className="btn btn-outline-danger">
-                {langs[`${lang}`].selectDelete}
-              </button>
             </div>
             <hr />
           </div>
@@ -150,6 +188,8 @@ export default function Products(props) {
                   type="checkbox"
                   name="checkbox"
                   id="tanla"
+                  checked={item.checked}
+                  onChange={() => changeItem(item)}
                 />
               ) : (
                 ""

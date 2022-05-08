@@ -13,7 +13,7 @@ export default function Navbar(props) {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState([]);
   const dispatch = useDispatch();
-  const { lang, auth, category, products } = useSelector((state) => state);
+  const { lang, auth, category } = useSelector((state) => state);
   const { cart, page } = useSelector((state) => state.globalState);
   const logout = () => {
     // navigate("/login");

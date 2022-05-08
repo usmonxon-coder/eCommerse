@@ -17,11 +17,16 @@ export default function CreateProducts(props) {
     product_id: "",
     title: "",
     price: "",
-    description:
-      "The versatile Vivobook Go 14 Flip, which combines a laptop anda tablet weighs onlyg so you can easily take it anywhere with you.",
-    content:
+    descriptionUz:
+      "360° kabriolet Vivobook Go 14 Flip bilan dunyoni kashf eting.",
+    descriptionEng:
+      " Explore the world with the Vivobook Go 14 Flip, a 360°convertible.",
+    contentUz:
+      "Noutbuk va planshetni birlashtirgan ko‘p qirrali Vivobook Go 14 Flip atigi 1,45 kg og‘irlik qiladi, shuning uchun uni istalgan joyga bemalol o‘zingiz bilan olib ketishingiz mumkin. Qurilmaning apparat konfiguratsiyasi zamonaviy Intel Pentium  Silver protsessorini o'z ichiga oladi.",
+    contentEng:
       "The versatile Vivobook Go 14 Flip, which combines a laptop and  a tablet, weighs only 1.45 kg, so you can easily take it anywhere with you.",
-    category: "",
+    categoryUz: "",
+    categoryEng: "",
   };
   const [data, setData] = useState(initialState);
 
@@ -54,41 +59,56 @@ export default function CreateProducts(props) {
         console.log(res);
         setImages(res.data);
         dispatch({ type: globalTypes.LOADING, payload: false });
+        let myData = data;
+        myData.images = res.data;
+        setData(myData);
       })
       .catch((err) => {
         toast.error(err.response.data.msg);
         dispatch({ type: globalTypes.LOADING, payload: false });
       });
   };
-
   const handleInput = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
 
-  const createProduct = async () => {
-    try {
-      let res;
-      if (id) {
-        res = await axios.put(
-          `/api/products/${id}`,
-          { ...data, images },
-          { headers: { Authorization: auth.accessToken } }
-        );
-      } else {
-        res = await axios.post(
-          `/api/products/${id}`,
-          { ...data, images },
-          { headers: { Authorization: auth.accessToken } }
-        );
-      }
-      setData(initialState);
-      setImages("");
-      // navigate("/");
-      toast.success(res.data.msg);
-    } catch (error) {
-      toast.error(error.response.data.msg);
-    }
+  const destroy = () => {
+    dispatch({ type: globalTypes.LOADING, payload: true });
+    axios
+      .post(
+        "/api/destroy",
+        { public_id: images.public_id },
+        { headers: { Authorization: auth.accessToken } }
+      )
+      .then((res) => {
+        console.log(res);
+        dispatch({ type: globalTypes.LOADING, payload: false });
+        toast.success(res.data.msg);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        dispatch({ type: globalTypes.LOADING, payload: false });
+      });
+    setImages("");
+  };
+  const createProduct = (e) => {
+    e.preventDefault();
+    axios
+      .post("/api/products", data, {
+        headers: { Authorization: auth.accessToken },
+      })
+      .then((res) => {
+        console.log(res);
+        toast.success(res.data.msg);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.response.data.msg);
+      });
+    setData(initialState);
+    setImages("");
+    // navigate("/");
   };
 
   const editProduct = () => {
@@ -100,6 +120,21 @@ export default function CreateProducts(props) {
       .catch((err) => {
         console.log(err.response);
       });
+  };
+  const selectCategory = (e) => {
+    let myCategory = e.target.value;
+    if (lang === "Uz") {
+      let categoryEng = category.find(
+        (item) => item.nameUz === myCategory
+      ).nameEng;
+      setData({ ...data, categoryUz: myCategory, categoryEng });
+    }
+    if (lang === "Eng") {
+      let categoryUz = category.find(
+        (item) => item.nameEng === myCategory
+      ).nameUz;
+      setData({ ...data, categoryEng: myCategory, categoryUz });
+    }
   };
 
   useEffect(() => {
@@ -131,12 +166,14 @@ export default function CreateProducts(props) {
                 </div>
               )}
 
-              {/* <span className="close position-absolute">X</span> */}
+              <span onClick={destroy} className="close">
+                X
+              </span>
             </div>
           </div>
           <div className="col-md-6 offset-md-1">
             <div className="card2">
-              <form>
+              <form onSubmit={createProduct}>
                 <input
                   className="form-control mb-2"
                   placeholder="Productid..."
@@ -171,9 +208,8 @@ export default function CreateProducts(props) {
                   cols="30"
                   rows="3"
                   onChange={handleInput}
-                  // defaultValue={"salom"}
                 >
-                  360° kabriolet Vivobook Go 14 Flip bilan dunyoni kashf eting.
+                  {data.descriptionUz}
                 </textarea>
                 <textarea
                   className="form-control mb-2"
@@ -182,10 +218,8 @@ export default function CreateProducts(props) {
                   cols="30"
                   rows="3"
                   onChange={handleInput}
-                  // defaultValue={"salom"}
                 >
-                  Explore the world with the Vivobook Go 14 Flip, a 360°
-                  convertible.
+                  {data.descriptionEng}
                 </textarea>
                 <textarea
                   className="form-control mb-2"
@@ -194,13 +228,8 @@ export default function CreateProducts(props) {
                   cols="30"
                   rows="4"
                   onChange={handleInput}
-                  // defaultValue={"salom"}
                 >
-                  Noutbuk va planshetni birlashtirgan ko‘p qirrali Vivobook Go
-                  14 Flip atigi 1,45 kg og‘irlik qiladi, shuning uchun uni
-                  istalgan joyga bemalol o‘zingiz bilan olib ketishingiz mumkin.
-                  Qurilmaning apparat konfiguratsiyasi zamonaviy Intel Pentium
-                  Silver protsessorini o'z ichiga oladi.
+                  {data.contentUz}
                 </textarea>
                 <textarea
                   className="form-control mb-2"
@@ -209,37 +238,35 @@ export default function CreateProducts(props) {
                   cols="30"
                   rows="4"
                   onChange={handleInput}
-                  // defaultValue={"salom"}
                 >
-                  The versatile Vivobook Go 14 Flip, which combines a laptop and
-                  a tablet, weighs only 1.45 kg, so you can easily take it
-                  anywhere with you. The hardware configuration of the device
-                  includes a modern Intel Pentium Silver processor.
+                  {data.contentEng}
                 </textarea>
-                <select className="form-control mb-2 form-select" name="" id="">
+                <select
+                  onChange={selectCategory}
+                  className="form-control mb-2 form-select"
+                  name=""
+                  id=""
+                >
                   <option value="">{langs[`${lang}`].selectCategory}</option>
                   {category.length &&
                     category.map((item, index) => (
                       <option
                         onChange={handleInput}
                         key={index}
-                        value={`category${lang}`}
+                        value={item[`name${lang}`]}
                       >
                         {item[`name${lang}`]}
                       </option>
                     ))}
                 </select>
-                <button
-                  onClick={createProduct}
-                  className="btn btn-danger form-control"
-                >
+                <button className="btn btn-danger form-control mb-2">
                   {langs[`${lang}`].create}
                 </button>
                 <button
                   onClick={() => editProduct()}
                   className="btn btn-danger form-control"
                 >
-                  Taxrirlah...
+                  Taxrirlash...
                 </button>
               </form>
             </div>
