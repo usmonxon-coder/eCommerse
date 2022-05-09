@@ -75,12 +75,6 @@ export default function Navbar(props) {
       });
   };
 
-  // useEffect(() => {
-  //   if (page !== 1) {
-  //     getSortProducts(mySort);
-  //   }
-  // }, [page]);
-
   useEffect(() => {
     getSortProducts(mySort);
   }, [category, page]);

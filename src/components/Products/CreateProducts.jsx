@@ -89,10 +89,12 @@ export default function CreateProducts(props) {
       .catch((err) => {
         console.log(err.response);
         dispatch({ type: globalTypes.LOADING, payload: false });
+        toast.error(err.response.data.msg);
       });
     setImages("");
   };
   const createProduct = (e) => {
+    dispatch({ type: globalTypes.LOADING, payload: true });
     e.preventDefault();
     axios
       .post("/api/products", data, {
@@ -101,10 +103,12 @@ export default function CreateProducts(props) {
       .then((res) => {
         console.log(res);
         toast.success(res.data.msg);
+        dispatch({ type: globalTypes.LOADING, payload: false });
       })
       .catch((err) => {
         console.log(err);
         toast.error(err.response.data.msg);
+        dispatch({ type: globalTypes.LOADING, payload: false });
       });
     setData(initialState);
     setImages("");

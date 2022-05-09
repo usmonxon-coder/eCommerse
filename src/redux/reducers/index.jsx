@@ -1,18 +1,16 @@
 import { combineReducers } from "redux";
 import { auth } from "./auth";
 import { category } from "./category";
-import { currentProduct } from "./currentProduct";
 import { globalState } from "./globalState";
 import { lang } from "./lang";
 import { loading } from "./loading";
 import { products } from "./products";
 
 export const rootReducer = combineReducers({
-  auth: auth,
+  auth: auth,      
   loading: loading,
-  lang: lang,
+  lang: lang,      
   products: products,
   globalState: globalState,
   category: category,
-  currentProduct: currentProduct,
 });

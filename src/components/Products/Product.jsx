@@ -18,21 +18,21 @@ export default function Product(props) {
     // if (!cart.product) {
     //   console.log("bor");
     // } else {
-      let salom = cart.push(product);
-      axios
-        .put(
-          "/user/addCart",
-          { cart },
-          { headers: { Authorization: auth.accessToken } }
-        )
-        .then((res) => {
-          dispatch({ type: globalTypes.ADD_TO_CART, payload: salom });
-          console.log(res);
-          toast.success("Add To card");
-        })
-        .catch((err) => {
-          console.log(err.response);
-        });
+    let salom = cart.push(product);
+    axios
+      .put(
+        "/user/addCart",
+        { cart },
+        { headers: { Authorization: auth.accessToken } }
+      )
+      .then((res) => {
+        dispatch({ type: globalTypes.ADD_TO_CART, payload: salom });
+        console.log(res);
+        toast.success("Add To card");
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
     // }
     console.log(cart.push(product));
   };

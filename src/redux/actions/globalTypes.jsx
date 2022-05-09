@@ -1,5 +1,3 @@
-import { loading } from "../reducers/loading";
-
 export const globalTypes = {
   AUTH: "AUTH",
   LOADING: "LOADING",
@@ -8,6 +6,4 @@ export const globalTypes = {
   ADD_TO_CART: "ADD_TO_CART",
   CATEGORY: "CATEGORY",
   PAGE: "PAGE",
-  INCREMENT: "INCREMENT",
-  DICRIMENT: "DICRIMENT",
 };

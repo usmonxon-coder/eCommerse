@@ -88,8 +88,8 @@ export default function Products(props) {
     }
   };
 
-  let yuqoriga = document.querySelector(".to_top_btn");
   const top = () => {
+    let yuqoriga = document.querySelector(".to_top_btn");
     window.addEventListener("scroll", () => {
       if (window.scrollY > 200) {
         yuqoriga.style.display = "flex";
@@ -141,7 +141,7 @@ export default function Products(props) {
     setAllProducts(myNewProducts);
     dispatch({ type: globalTypes.PRODUCTS, payload: myNewProducts });
   };
-   
+
   return (
     <div className="products pt-4">
       <div className="container">

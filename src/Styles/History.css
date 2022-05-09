@@ -1,3 +1,13 @@
+.history table td,
+th {
+  border: 1px solid black;
+}
+.history .table .images {
+  width: 30%;
+}
+.history table img {
+  width: 50%;
+}
 @media (max-width: 767px) {
   .history .container {
     overflow: auto;

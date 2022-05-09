@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { langs } from "../../langs/langs";
 import { globalTypes } from "../../redux/actions/globalTypes";
@@ -5,21 +7,49 @@ import { globalTypes } from "../../redux/actions/globalTypes";
 export default function Cart(props) {
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.globalState);
-  const { lang, auth, currentProduct } = useSelector((state) => state);
+  const { lang, auth } = useSelector((state) => state);
+  const [totalPrice, setTotalPrice] = useState(0);
 
-  const minus = () => {
-    if (currentProduct.count > 1) {
-      dispatch({ type: globalTypes.DICRIMENT, payload: currentProduct });
+  const minus = (id) => {
+    cart.forEach((item) => {
+      if (item._id == id && item.quantity > 1) {
+        item.quantity -= 1;
+      }
+    });
+    dispatch({ type: globalTypes.ADD_TO_CART, payload: cart });
+    sendCart();
+  };
+  const plus = (id) => {
+    cart.forEach((item) => {
+      if (item._id == id) {
+        item.quantity += 1;
+      }
+    });
+    dispatch({ type: globalTypes.ADD_TO_CART, payload: cart });
+    sendCart();
+  };
+  const sendCart = () => {
+    axios
+      .put(
+        "/user/addCart",
+        { cart },
+        { headers: { Authorization: auth.accessToken } }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    let sum = 0;
+    for (let i = 0; i < cart.length; i++) {
+      sum += cart[i].price * cart[i].quantity;
     }
-  };
-
-  const plus = (item) => {
-    let salom = cart.findIndex((item) => item === currentProduct);
-    // if (salom !== -1) {
-    dispatch({ type: globalTypes.INCREMENT, payload: currentProduct });
-    // }
-    console.log(item, salom);
-  };
+    setTotalPrice(sum);
+  }, []);
 
   return (
     <div className="cart">
@@ -32,8 +62,7 @@ export default function Cart(props) {
         {auth.user && (
           <div className="xarid d-flex align-items-center justify-content-between">
             <h3 className="my-4">
-              <b>{langs[`${lang}`].total_price}: </b> {cart.price}
-              {console.log(cart.find((item) => item.price))}
+              <b>{langs[`${lang}`].total_price}: </b> {totalPrice}$
             </h3>
             <button className="btn btn-success">Paypal</button>
           </div>
@@ -68,7 +97,7 @@ export default function Cart(props) {
                         -
                       </button>
                       <button className="btn px-3 btn-light">
-                        {currentProduct.count}
+                        {item.quantity}
                       </button>
                       <button
                         onClick={() => plus(item._id)}
