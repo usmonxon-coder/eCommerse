@@ -1,5 +1,7 @@
-.history table td,
-th {
+.history table td {
+  border: 1px solid black;
+}
+.history table th {
   border: 1px solid black;
 }
 .history .table .images {

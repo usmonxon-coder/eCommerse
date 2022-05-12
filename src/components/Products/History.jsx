@@ -19,6 +19,7 @@ export default function History(props) {
       .then((res) => {
         console.log(res.data);
         setTarix(res.data);
+        dispatch({ type: globalTypes.HISTORY, payload: res.data });
         dispatch({ type: globalTypes.LOADING, payload: false });
       })
       .catch((err) => {
@@ -50,6 +51,13 @@ export default function History(props) {
                 </td>
               </tr>
             ))}
+            {tarix.length === 0 && (
+              <tr className="w-100  mx-auto text-center">
+                <td colSpan={3}>
+                  <h1>No Data</h1>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

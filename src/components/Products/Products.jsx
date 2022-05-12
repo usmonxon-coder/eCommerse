@@ -207,7 +207,7 @@ export default function Products(props) {
                           {langs[`${lang}`].delete}
                         </button>
                         <Link
-                          to={`/create_product/${item._id}`}
+                          to={`/edit_product/${item._id}`}
                           className="btn btn-light d-block shadow-none"
                         >
                           {langs[`${lang}`].taxrir}

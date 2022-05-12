@@ -16,6 +16,7 @@ import History from "./components/Products/History";
 import Orderhistory from "./components/Products/Orderhistory";
 import CreateProducts from "./components/Products/CreateProducts";
 import Category from "./components/Products/Category";
+import EditProduct from "./components/Products/EditProduct";
 
 export default function App() {
   const { auth, loading } = useSelector((state) => state);
@@ -23,15 +24,11 @@ export default function App() {
   const dispatch = useDispatch((state) => state);
 
   useEffect(() => {
-    // if (!auth.accessToken) {
-    //   navigate("/login");
-    // }
     if (localStorage.getItem("isLogin")) {
       dispatch({ type: globalTypes.LOADING, payload: true });
       axios
         .get("/user/refresh_token")
         .then((res) => {
-          // navigate("/");
           dispatch({ type: globalTypes.AUTH, payload: res.data });
           dispatch({ type: globalTypes.LOADING, payload: false });
           dispatch({
@@ -55,7 +52,8 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/product/:id" element={<Product />} />
-        <Route path="/create_product/:id" element={<CreateProducts />} />
+        <Route path="/create_product" element={<CreateProducts />} />
+        <Route path="/edit_product/:id" element={<EditProduct />} />
         <Route path="/category" element={<Category />} />
         <Route path="/order/:id" element={<Orderhistory />} />
         <Route path="/history" element={<History />} />

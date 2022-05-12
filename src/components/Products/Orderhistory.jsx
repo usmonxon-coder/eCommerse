@@ -17,12 +17,11 @@ export default function Orderhistory(props) {
         headers: { Authorization: auth.accessToken },
       })
       .then((res) => {
-        const myHistory = res.data.find((item, index) => item._id === id);
+        const myHistory = res.data.find((item) => item._id === id);
         const myCart = myHistory.cart;
         setHistory(myCart);
-        // dispatch({ type: globalTypes.PRODUCTS, payload: res.data.products });
+        // dispatch({ type: globalTypes, payload: res.data });
         dispatch({ type: globalTypes.LOADING, payload: false });
-        console.log(myCart);
       })
       .catch((err) => {
         console.log(err.response);
@@ -47,17 +46,23 @@ export default function Orderhistory(props) {
             </tr>
           </thead>
           <tbody className="border">
-            {history.length &&
-              history.map((item, index) => (
-                <tr key={index}>
-                  <td className="images" scope="row">
-                    <img src={item.images.url} alt="rasm" />
-                  </td>
-                  <td> {item.titleUz}</td>
-                  <td>{item.quantity} </td>
-                  <td>{item.price}</td>
-                </tr>
-              ))}
+            {history.map((item, index) => (
+              <tr key={index}>
+                <td className="images" scope="row">
+                  <img src={item.images.url} alt="rasm" />
+                </td>
+                <td> {item.titleUz}</td>
+                <td>{item.quantity} </td>
+                <td>{item.price}</td>
+              </tr>
+            ))}
+            {history.length === 0 && (
+              <tr className="w-100  mx-auto text-center">
+                <td colSpan={4}>
+                  <h1>No Data</h1>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

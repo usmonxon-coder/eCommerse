@@ -120,7 +120,7 @@ export default function Navbar(props) {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link className="nav-link active" to="/create_product/:id">
+                    <Link className="nav-link active" to="/create_product">
                       {langs[`${lang}`].createProducts}
                     </Link>
                   </li>

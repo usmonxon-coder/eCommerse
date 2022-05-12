@@ -1,3 +1,4 @@
+import "../../Styles/EditProduct.css";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,27 +9,43 @@ import { globalTypes } from "../../redux/actions/globalTypes";
 
 export default function CreateProducts(props) {
   const [category, setCategory] = useState({});
-  const { lang, auth, products } = useSelector((state) => state);
+  const { lang, auth } = useSelector((state) => state);
   const [images, setImages] = useState("");
   const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
-  const initialState = {
-    product_id: "",
-    title: "",
-    price: "",
-    descriptionUz:
-      "360° kabriolet Vivobook Go 14 Flip bilan dunyoni kashf eting.",
-    descriptionEng:
-      " Explore the world with the Vivobook Go 14 Flip, a 360°convertible.",
-    contentUz:
-      "Noutbuk va planshetni birlashtirgan ko‘p qirrali Vivobook Go 14 Flip atigi 1,45 kg og‘irlik qiladi, shuning uchun uni istalgan joyga bemalol o‘zingiz bilan olib ketishingiz mumkin. Qurilmaning apparat konfiguratsiyasi zamonaviy Intel Pentium  Silver protsessorini o'z ichiga oladi.",
-    contentEng:
-      "The versatile Vivobook Go 14 Flip, which combines a laptop and  a tablet, weighs only 1.45 kg, so you can easily take it anywhere with you.",
-    categoryUz: "",
-    categoryEng: "",
+  const [data, setData] = useState({});
+
+  const editProduct = () => {
+    dispatch({ type: globalTypes.LOADING, payload: true });
+    axios
+      .get(`/api/products`)
+      .then((res) => {
+        const myProduct = res.data.products.find((item) => item._id === id);
+        setData(myProduct);
+        const rasm = myProduct.images;
+        setImages(rasm);
+        dispatch({ type: globalTypes.LOADING, payload: false });
+      })
+      .catch((err) => {
+        console.log(err.response);
+        dispatch({ type: globalTypes.LOADING, payload: false });
+      });
   };
-  const [data, setData] = useState(initialState);
+
+  const editOneProduct = () => {
+    console.log(id);
+    // axios
+    //   .put(`/api/product/:${id}`, {
+    //     headers: { Authorization: auth.accessToken },
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.response);
+    //   });
+  };
 
   const getCategory = () => {
     axios
@@ -68,6 +85,7 @@ export default function CreateProducts(props) {
         dispatch({ type: globalTypes.LOADING, payload: false });
       });
   };
+
   const handleInput = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
@@ -93,6 +111,7 @@ export default function CreateProducts(props) {
       });
     setImages("");
   };
+
   const createProduct = (e) => {
     dispatch({ type: globalTypes.LOADING, payload: true });
     e.preventDefault();
@@ -110,21 +129,11 @@ export default function CreateProducts(props) {
         toast.error(err.response.data.msg);
         dispatch({ type: globalTypes.LOADING, payload: false });
       });
-    setData(initialState);
+    // setData(initialState);
     setImages("");
     // navigate("/");
   };
 
-  const editProduct = () => {
-    axios
-      .put(`/api/product/:id`)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
-  };
   const selectCategory = (e) => {
     let myCategory = e.target.value;
     if (lang === "Uz") {
@@ -143,6 +152,7 @@ export default function CreateProducts(props) {
 
   useEffect(() => {
     getCategory();
+    editProduct();
   }, []);
 
   return (
@@ -153,20 +163,19 @@ export default function CreateProducts(props) {
             <div className="card1 border w-100 text-center">
               <input
                 onChange={upload}
-                className={`w-100 h-100 ${images ? "noFile" : "file"} `}
+                className={`${images ? "noFile" : "file"} `}
                 type="file"
               />
               {images ? (
                 <img className="w-100 " src={images.url} alt="rasm" />
               ) : (
                 <div style={{ height: "500px" }}>
-                  {" "}
-                  <img
+                  {/* <img
                     style={{ padding: "180px 20px" }}
                     className="w-50"
                     src="/images/plus.png"
                     alt="rasm"
-                  />
+                  /> */}
                 </div>
               )}
 
@@ -184,6 +193,7 @@ export default function CreateProducts(props) {
                   type="text"
                   name="product_id"
                   onChange={handleInput}
+                  value={data.product_id}
                 />
                 <input
                   className="form-control mb-2"
@@ -191,6 +201,7 @@ export default function CreateProducts(props) {
                   type="text"
                   name="titleUz"
                   onChange={handleInput}
+                  value={data.titleUz}
                 />
                 <input
                   className="form-control mb-2"
@@ -198,6 +209,7 @@ export default function CreateProducts(props) {
                   type="text"
                   name="titleEng"
                   onChange={handleInput}
+                  value={data.titleEng}
                 />
                 <input
                   className="form-control mb-2"
@@ -205,6 +217,7 @@ export default function CreateProducts(props) {
                   type="text"
                   name="price"
                   onChange={handleInput}
+                  value={data.price}
                 />
                 <textarea
                   className="form-control mb-2"
@@ -212,9 +225,8 @@ export default function CreateProducts(props) {
                   cols="30"
                   rows="3"
                   onChange={handleInput}
-                >
-                  {data.descriptionUz}
-                </textarea>
+                  defaultValue={data.descriptionUz}
+                ></textarea>
                 <textarea
                   className="form-control mb-2"
                   name="descriptionEng"
@@ -222,9 +234,8 @@ export default function CreateProducts(props) {
                   cols="30"
                   rows="3"
                   onChange={handleInput}
-                >
-                  {data.descriptionEng}
-                </textarea>
+                  defaultValue={data.descriptionEng}
+                ></textarea>
                 <textarea
                   className="form-control mb-2"
                   name="contentUz"
@@ -232,9 +243,8 @@ export default function CreateProducts(props) {
                   cols="30"
                   rows="4"
                   onChange={handleInput}
-                >
-                  {data.contentUz}
-                </textarea>
+                  defaultValue={data.contentUz}
+                ></textarea>
                 <textarea
                   className="form-control mb-2"
                   name="contentEng"
@@ -242,16 +252,17 @@ export default function CreateProducts(props) {
                   cols="30"
                   rows="4"
                   onChange={handleInput}
-                >
-                  {data.contentEng}
-                </textarea>
+                  defaultValue={data.contentEng}
+                ></textarea>
                 <select
                   onChange={selectCategory}
                   className="form-control mb-2 form-select"
                   name=""
                   id=""
                 >
-                  <option value="">{langs[`${lang}`].selectCategory}</option>
+                  <option value={data.categoryUz}>
+                    {langs[`${lang}`].selectCategory}
+                  </option>
                   {category.length &&
                     category.map((item, index) => (
                       <option
@@ -263,8 +274,12 @@ export default function CreateProducts(props) {
                       </option>
                     ))}
                 </select>
-                <button className="btn btn-danger form-control mb-2">
-                  {langs[`${lang}`].create}
+                <button
+                  type="button"
+                  onClick={() => editOneProduct()}
+                  className="btn btn-danger form-control"
+                >
+                  Taxrirlash...
                 </button>
               </form>
             </div>

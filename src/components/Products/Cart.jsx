@@ -14,20 +14,37 @@ export default function Cart(props) {
     cart.forEach((item) => {
       if (item._id == id && item.quantity > 1) {
         item.quantity -= 1;
+        // let sum = item.price;
+        // sum += item.price * item.quantity;
       }
     });
+    let sum = 0;
+    for (let i = 0; i < cart.length; i++) {
+      sum += cart[i].price * cart[i].quantity;
+    }
+    console.log(cart[0]);
+    setTotalPrice(sum);
     dispatch({ type: globalTypes.ADD_TO_CART, payload: cart });
     sendCart();
   };
+
   const plus = (id) => {
     cart.forEach((item) => {
       if (item._id == id) {
+        // let sum = item.price;
         item.quantity += 1;
+        // sum += item.price * item.quantity;
       }
     });
+    let sum = 0;
+    for (let i = 0; i < cart.length; i++) {
+      sum += cart[i].price * cart[i].quantity;
+    }
+    setTotalPrice(sum);
     dispatch({ type: globalTypes.ADD_TO_CART, payload: cart });
     sendCart();
   };
+
   const sendCart = () => {
     axios
       .put(
@@ -43,13 +60,11 @@ export default function Cart(props) {
       });
   };
 
-  useEffect(() => {
-    let sum = 0;
-    for (let i = 0; i < cart.length; i++) {
-      sum += cart[i].price * cart[i].quantity;
-    }
-    setTotalPrice(sum);
-  }, []);
+  const deleteProduct = (id) => {
+    console.log(`ochirildi ${id}`);
+    let myCart = cart.filter((item, index) => item !== item[index]);
+    console.log(myCart);
+  };
 
   return (
     <div className="cart">
@@ -89,22 +104,32 @@ export default function Cart(props) {
                       <b>{langs[`${lang}`].content} :</b>
                       {item[`content${lang}`]}
                     </p>
-                    <div className="btn-group mb-3">
-                      <button
-                        onClick={() => minus(item._id)}
-                        className="btn px-3 btn-info"
-                      >
-                        -
-                      </button>
-                      <button className="btn px-3 btn-light">
-                        {item.quantity}
-                      </button>
-                      <button
-                        onClick={() => plus(item._id)}
-                        className="btn px-3 btn-info"
-                      >
-                        +
-                      </button>
+                    <div className="xxx d-flex justify-content-between">
+                      <div className="btn-group mb-3">
+                        <button
+                          onClick={() => minus(item._id)}
+                          className="btn px-3 btn-info"
+                        >
+                          -
+                        </button>
+                        <button className="btn px-3 btn-light">
+                          {item.quantity}
+                        </button>
+                        <button
+                          onClick={() => plus(item._id)}
+                          className="btn px-3 btn-info"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <div className="xx ">
+                        <button
+                          onClick={() => deleteProduct(item._id)}
+                          className="btn d-block btn-danger"
+                        >
+                          X
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

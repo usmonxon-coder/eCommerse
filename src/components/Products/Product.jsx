@@ -14,28 +14,38 @@ export default function Product(props) {
   const [relatedProduct, SetRelatedProduct] = useState([]);
   const [product, SetProduct] = useState({});
 
-  const addCart = () => {
-    // if (!cart.product) {
-    //   console.log("bor");
-    // } else {
-    let salom = cart.push(product);
-    axios
-      .put(
-        "/user/addCart",
-        { cart },
-        { headers: { Authorization: auth.accessToken } }
-      )
-      .then((res) => {
-        dispatch({ type: globalTypes.ADD_TO_CART, payload: salom });
-        console.log(res);
-        toast.success("Add To card");
-      })
-      .catch((err) => {
-        console.log(err.response);
+  const addToCard = (item) => {
+    if (!auth.user) {
+      toast.error("Please login or register to buy", {
+        autoClose: 3000,
+        position: "top-center",
       });
-    // }
-    console.log(cart.push(product));
+    } else {
+      const myCart = cart;
+      const isHave = myCart.findIndex((it, index) => it._id === item._id);
+      if (isHave === -1) {
+        item.quantity = 1;
+        myCart.push(item);
+        axios
+          .put(
+            "/user/addCart",
+            { cart },
+            { headers: { Authorization: auth.accessToken } }
+          )
+          .then((res) => {
+            dispatch({ type: globalTypes.ADD_TO_CART, payload: myCart });
+            console.log(res);
+            toast.success("Add To card");
+          })
+          .catch((err) => {
+            console.log(err.response);
+          });
+      } else {
+        toast.error("This product already exist");
+      }
+    }
   };
+
   const viewProduct = () => {
     dispatch({ type: globalTypes.LOADING, payload: true });
     axios
@@ -93,7 +103,10 @@ export default function Product(props) {
             <p>
               <b>{langs[`${lang}`].sold}: </b> {product.sold}
             </p>
-            <button onClick={addCart} className="btn btn-success">
+            <button
+              onClick={() => addToCard(product)}
+              className="btn btn-success"
+            >
               {langs[`${lang}`].buy}
             </button>
           </div>
@@ -128,10 +141,14 @@ export default function Product(props) {
                       {item[`description${lang}`]}
                     </p>
                     <div className="d-flex align-items-center">
-                      <button className="btn btn-danger d-block w-100 me-3">
+                      <button
+                        onClick={() => addToCard(item)}
+                        className="btn btn-danger d-block w-100 me-3"
+                      >
                         {langs[`${lang}`].buy}
                       </button>
                       <Link
+                        onClick={viewProduct}
                         to={`/product/${item._id}`}
                         className="btn btn-warning d-block w-100"
                       >
